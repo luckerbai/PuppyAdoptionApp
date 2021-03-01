@@ -15,14 +15,11 @@
  */
 package com.example.androiddevchallenge
 
-import android.content.Intent
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -32,21 +29,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import com.example.androiddevchallenge.model.Puppy
-import com.example.androiddevchallenge.model.puppys
 import com.example.androiddevchallenge.ui.theme.MyTheme
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-class MainActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyTheme {
-                PuppyAdoption()
+                PuppyAdoptionDetails()
             }
         }
     }
@@ -54,27 +48,21 @@ class MainActivity : AppCompatActivity() {
 
 // Start building your app here!
 @Composable
-fun PuppyAdoption() {
+fun PuppyAdoptionDetails() {
+    val context = LocalContext.current
+    val puppy: Puppy = (context as Activity).intent.getSerializableExtra("puppy") as Puppy
+
     Surface(color = MaterialTheme.colors.background, modifier = Modifier.fillMaxSize()) {
-        LazyColumn {
-            items(puppys) { puppy ->
-                PuppyItem(puppy = puppy)
-            }
+        Column {
+            PuppyDetail(puppy = puppy)
         }
     }
 }
 
 @Composable
-fun PuppyItem(puppy: Puppy) {
-    val context = LocalContext.current
+fun PuppyDetail(puppy: Puppy) {
     val typography = MaterialTheme.typography
-    Column(modifier = Modifier
-        .padding(16.dp)
-        .clickable {
-            val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("puppy", puppy)
-            startActivity(context, intent, null)
-        }) {
+    Column {
 
         MaterialTheme {
             val modifier = Modifier
@@ -93,11 +81,13 @@ fun PuppyItem(puppy: Puppy) {
 
             Text(
                 text = puppy.name,
-                style = typography.h6
+                style = typography.h6,
+                modifier = Modifier.padding(12.dp)
             )
             Text(
-                text = puppy.desc, style = typography.body1, maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                text = puppy.desc,
+                style = typography.body1,
+                modifier = Modifier.padding(12.dp)
             )
         }
 
@@ -106,16 +96,16 @@ fun PuppyItem(puppy: Puppy) {
 
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
-fun LightPreview() {
+fun DetailLightPreview() {
     MyTheme {
-        PuppyAdoption()
+        PuppyAdoptionDetails()
     }
 }
 
 @Preview("Dark Theme", widthDp = 360, heightDp = 640)
 @Composable
-fun DarkPreview() {
+fun DetailDarkPreview() {
     MyTheme(darkTheme = true) {
-        PuppyAdoption()
+        PuppyAdoptionDetails()
     }
 }
