@@ -20,7 +20,12 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -68,13 +73,15 @@ fun PuppyAdoption() {
 fun PuppyItem(puppy: Puppy) {
     val context = LocalContext.current
     val typography = MaterialTheme.typography
-    Column(modifier = Modifier
-        .padding(16.dp)
-        .clickable {
-            val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("puppy", puppy)
-            startActivity(context, intent, null)
-        }) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .clickable {
+                val intent = Intent(context, DetailActivity::class.java)
+                intent.putExtra("puppy", puppy)
+                startActivity(context, intent, null)
+            }
+    ) {
 
         MaterialTheme {
             val modifier = Modifier
@@ -100,7 +107,6 @@ fun PuppyItem(puppy: Puppy) {
                 overflow = TextOverflow.Ellipsis
             )
         }
-
     }
 }
 
